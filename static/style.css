@@ -1,12 +1,18 @@
+/* front end stack */
 .tag-javascript { background-color: #f7df1e; color: #000; }
-.tag-html { background-color: #e34c26; color: #fff; }
+.tag-html5 { background-color: #e34c26; color: #fff; }
 .tag-css { background-color: #264de4; color: #fff; }
 .tag-scss { background-color: #cd6799; color: #fff; }
 .tag-bootstrap { background-color: #7952b3; color: #fff; }
 
+/* back end stack */
 .tag-python { background-color: #3776ab; color: #fff; }
 .tag-kivy { background-color: #2c3e50; color: #fff; }
 .tag-pydub { background-color: #8e44ad; color: #fff; }
 .tag-yt-dlp { background-color: #ff9900; color: #000; }
+.tag-ffmpeg { background-color: #107c10; color: #fff; }
+.tag-tkinter { background-color: #FFB703; color: #000; }
 
-.project-tags .badge { background-color: #6c757d; color: #fff; }
+#hint-message {
+    color: rgb(216, 131, 34) !important;
+}
