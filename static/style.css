@@ -1,3 +1,54 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #222222;
+    --card-bg: #f8f9fa;
+    --hint-color: rgb(216, 131, 34);
+}
+
+[data-theme = 'dark']{
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --hint-color: #f4a261;
+} 
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+html, body {
+    height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+/* this is the little dark mode/light mode button on the top left corner */
+#theme-toggle {
+    margin: 1%;
+}
+
+.card, .container, .repo {
+    background-color: var(--card-bg);
+    transition: background-color 0.3s;
+    border: 1px solid #ccc;
+}
+
+.card,
+.card-body,
+.card-text {
+    color: var(--text-color) !important;
+    transition: color 0.3s, background-color 0.3s;
+}
+
 /* front end stack */
 .tag-javascript { background-color: #f7df1e; color: #000; }
 .tag-html5 { background-color: #e34c26; color: #fff; }
@@ -14,5 +65,5 @@
 .tag-tkinter { background-color: #FFB703; color: #000; }
 
 #hint-message {
-    color: rgb(216, 131, 34) !important;
+    color: var(--hint-color);
 }
