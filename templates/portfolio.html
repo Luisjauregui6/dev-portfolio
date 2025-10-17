@@ -23,7 +23,7 @@
             </form>
          </div>
          <div class="container py-5 text-center">
-             <button type="button" class="btn btn-secondary" onclick="showHint()">Hint</button>
+             <button id="hint-btn" type="button" class="btn btn-secondary" onclick="showHint()">Hint</button>
              <p id="hint-message" class="mt-2 text-info"></p>
          </div>
          {% endif %}
@@ -82,6 +82,22 @@
          // switch text/symbols when the button is activated
          toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙'
       });
+
+      // hint button functionality
+      const hintBtn = document.getElementById('hint-btn');
+      const hintMessage = document.getElementById('hint-message');
+
+      // hint button animation 
+      setTimeout(() => {
+         hintBtn.classList.add('pulsate');
+      }, 10000);
+
+      // stop the pulsations when user clicks the hint button
+      function showHint(){
+         hintMessage.textContent = 'try: Luisjauregui6';
+         hintMessage.style.display = 'block';
+         hintBtn.classList.remove('pulsate');
+      }
 
    </script>
    </body>
