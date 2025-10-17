@@ -39,12 +39,13 @@ html, body {
 .card, .container, .repo {
     background-color: var(--card-bg);
     transition: background-color 0.3s;
-    border: 1px solid #ccc;
+    border: 1px solid #797676;
 }
 
 .card,
 .card-body,
-.card-text {
+.card-text,
+.paragraph-text {
     color: var(--text-color) !important;
     transition: color 0.3s, background-color 0.3s;
 }
@@ -65,5 +66,5 @@ html, body {
 .tag-tkinter { background-color: #FFB703; color: #000; }
 
 #hint-message {
-    color: var(--hint-color);
+    color: var(--hint-color) !important;
 }

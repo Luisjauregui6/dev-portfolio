@@ -15,9 +15,10 @@
          <!-- Search Bar -->
          {% if not data %}
          <div class="text-center mb-5">
-            <h1>Search GitHub User</h1>
+            <h1 class="fw-bold text-gradient mb-3">Search GitHub Profiles</h1>
+            <p class="paragraph-text text-muted fs-5">Find any GitHub user and explore their repositories instantly</p>
             <form method="POST" class="d-flex justify-content-center mt-3">
-               <input type="text" name="username" class="form-control w-50 me-2" placeholder="Enter GitHub username">
+               <input type="text" name="username" class="form-control w-50 me-2" placeholder="Enter a GitHub username...">
                <button type="submit" class="btn btn-primary">Search</button>
             </form>
          </div>
@@ -31,7 +32,7 @@
          <div class="text-center mb-5">
             <img src="{{ data.avatar }}" class="rounded-circle mb-3" width="150">
             <h1>{{ data.name }}</h1>
-            <p class="lead">{{ data.bio }}</p>
+            <p class="lead"><em>{{ data.bio }}</em></p>
             <a href="{{ data.html_url }}" target="_blank" class="btn btn-primary">Visit GitHub Account</a>
          </div>
          <!-- user projects -->
@@ -63,7 +64,7 @@
    <script>
       // show hint button settings
       function showHint() {
-          document.getElementById('hint-message').textContent = 'try typing: Luisjauregui6'
+          document.getElementById('hint-message').textContent = 'try: Luisjauregui6'
       }
       
       // dark mode/light mode settings
