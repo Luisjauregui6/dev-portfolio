@@ -31,6 +31,83 @@ html, body {
     padding: 2rem;
 }
 
+/* settings for the profile links to work in dark/light mode */
+
+/* linkedin button */
+.linkedin-btn {
+    background-color: white;
+    color: rgb(0, 119, 181);
+    border: 1px solid rgb(0, 119, 181);
+    transition: all 0.3s ease;
+}
+
+.linkedin-btn:hover {
+    background-color: rgb(0, 119, 181);
+    color: rgb(250, 250, 250);
+}
+
+[data-theme='dark'] .linkedin-btn {
+    background-color: rgb(0, 119, 181);
+    color: rgb(255, 255, 255);
+}
+
+[data-theme='dark'] .linkedin-btn:hover {
+    background-color: #e9e7e7;
+    color: rgb(0, 119, 181);
+}
+
+
+/* github button */
+.github-btn {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 1px solid black;
+    transition: all 0.3s ease;
+}
+
+.github-btn:hover {
+    background-color: #000000;
+    color: white;
+}
+
+[data-theme='dark'] .github-btn {
+    background-color: rgb(22, 22, 22);
+    color: rgb(248, 248, 248);
+}
+
+[data-theme='dark'] .github-btn:hover {
+    background-color: #e0e0e0;
+    color: black;
+}
+
+
+/* download cv button */
+.cv-btn {
+    background-color: rgba(255, 255, 255, 0.651);
+    color: rgb(60, 173, 50);
+    border: 1px solid rgb(60, 173, 50);
+    transition: all 0.3s ease;
+}
+
+.cv-btn:hover {
+    background-color: rgb(60, 173, 50);
+    color: white;
+}
+
+[data-theme='dark'] .cv-btn {
+    background-color: rgb(60, 173, 50);
+    color: black;
+}
+
+[data-theme='dark'] .cv-btn:hover {
+    background-color: #e0e0e0;
+    color: rgb(41, 126, 33);
+}
+
+
+
+
+
 /* this is the little dark mode/light mode button on the top left corner */
 #theme-toggle {
     margin: 1%;

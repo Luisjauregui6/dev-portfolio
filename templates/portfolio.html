@@ -1,104 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>GitHub Portfolio</title>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-   </head>
-   <header>
-      <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">dark mode</button>
-   </header>
-   <body>
-      <div class="container py-5">
-         <!-- Search Bar -->
-         {% if not data %}
-         <div class="text-center mb-5">
-            <h1 class="fw-bold text-gradient mb-3">Search GitHub Profiles</h1>
-            <p class="paragraph-text text-muted fs-5">Find any GitHub user and explore their repositories instantly</p>
-            <form method="POST" class="d-flex justify-content-center mt-3">
-               <input type="text" name="username" class="form-control w-50 me-2" placeholder="Enter a GitHub username...">
-               <button type="submit" class="btn btn-primary">Search</button>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>GitHub Portfolio</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="p-3 text-end">
+   <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">dark mode</button>
+</header>
+
+<div class="container py-5">
+
+   <!-- Search Bar -->
+   {% if not data %}
+   <div class="text-center mb-5">
+      <h1 class="fw-bold text-gradient mb-3">Search GitHub Profiles</h1>
+      <p class="paragraph-text text-muted fs-5">Find any GitHub user and explore their repositories instantly</p>
+      <form method="POST" class="d-flex justify-content-center mt-3">
+         <input type="text" name="username" class="form-control w-50 me-2" placeholder="Enter a GitHub username...">
+         <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <div class="mt-3">
+         <button id="hint-btn" type="button" class="btn btn-secondary" onclick="showHint()">Hint</button>
+         <p id="hint-message" class="mt-2 text-info"></p>
+      </div>
+   </div>
+   {% endif %}
+
+   <!-- Profile Section -->
+   {% if data %}
+   <div class="text-center mb-5">
+      <img src="{{ data.avatar }}" class="rounded-circle mb-3" width="150">
+      <h1>{{ data.name }}</h1>
+      <p class="lead"><em>{{ data.bio }}</em></p>
+      <a href="{{ data.html_url }}" target="_blank" class="btn btn-primary">Visit GitHub Account</a>
+   </div>
+
+   {% if data.is_owner %}
+   <hr class="my-5">
+   <div class="text-center mb-4">
+      <h2>About Me</h2>
+      <p class="lead">Hi, my name is Luis, a developer passionate about Python, automation, and creative interfaces.</p>
+
+      <!-- Tech stack icons -->
+      <div class="d-flex justify-content-center flex-wrap mb-4">
+         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="50" class="m-2" alt="Python">
+         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="50" class="m-2" alt="Flask">
+         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width="50" class="m-2" alt="Bootstrap">
+         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="50" class="m-2" alt="HTML5">
+         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="50" class="m-2" alt="CSS3">
+      </div>
+
+      <!-- Links -->
+      <div class="mb-4">
+         <a href="https://www.linkedin.com/in/luis-jauregui-flores-83672821b/" target="_blank" class="btn linkedin-btn me-2">LinkedIn</a>
+         <a href="https://github.com/Luisjauregui6" target="_blank" class="btn github-btn me-2">GitHub</a>
+         <a href="https://drive.google.com/file/d/1FmYPKWzrbVQuYgjMSodkk4SNclsjIocN/view?usp=drive_link" class="btn cv-btn">Download CV</a>
+      </div>
+
+      <!-- Contact form -->
+<div class="text-center mb-4">
+    <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#contactForm" aria-expanded="false" aria-controls="contactForm">
+        Contact Me
+    </button>
+</div>
+
+<div class="collapse" id="contactForm">
+    <div class="card mx-auto mt-4 shadow-sm" style="max-width: 500px;">
+        <div class="card-body">
+            <form method="POST" action="/contact">
+                <div class="mb-3">
+                    <input type="text" name="name" class="form-control" placeholder="Your name" required>
+                </div>
+                <div class="mb-3">
+                    <input type="email" name="email" class="form-control" placeholder="Your email" required>
+                </div>
+                <div class="mb-3">
+                    <textarea name="message" class="form-control" rows="3" placeholder="Your message" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Send</button>
             </form>
-         </div>
-         <div class="container py-5 text-center">
-             <button id="hint-btn" type="button" class="btn btn-secondary" onclick="showHint()">Hint</button>
-             <p id="hint-message" class="mt-2 text-info"></p>
-         </div>
-         {% endif %}
-         {% if data %}
-         <!-- On profile found -->
-         <div class="text-center mb-5">
-            <img src="{{ data.avatar }}" class="rounded-circle mb-3" width="150">
-            <h1>{{ data.name }}</h1>
-            <p class="lead"><em>{{ data.bio }}</em></p>
-            <a href="{{ data.html_url }}" target="_blank" class="btn btn-primary">Visit GitHub Account</a>
-         </div>
-         <!-- user projects -->
-         <h2 class="mb-4 text-center">Projects</h2>
-         <div class="row">
-            {% for repo in data.repos %}
-            <div class="col-md-4 mb-3">
-               <div class="card h-100 shadow-sm">
-                  <div class="card-body">
-                     <h5 class="card-title">
-                        <a href="{{ repo.url }}" target="_blank">{{ repo.name }}</a>
-                     </h5>
-                     <p class="card-text">{{ repo.description }}</p>
-                  </div>
-                  <div class="card-footer">
-                     <div class="project-tags">
-                        {% for tag in repo.tags %}
-                        <span class="badge tag-{{ tag|lower|replace(' ', '-')|replace('_','-') }} me-1">{{ tag }}</span>
-                        {% endfor %}
-                     </div>
-                  </div>
+        </div>
+    </div>
+</div>
+   {% endif %}
+
+   <!-- User projects -->
+   <h2 class="mb-4 text-center">Projects</h2>
+   <div class="row">
+      {% for repo in data.repos %}
+      <div class="col-md-4 mb-3">
+         <div class="card h-100 shadow-sm">
+            <div class="card-body">
+               <h5 class="card-title">
+                  <a href="{{ repo.url }}" target="_blank">{{ repo.name }}</a>
+               </h5>
+               <p class="card-text">{{ repo.description }}</p>
+            </div>
+            <div class="card-footer">
+               <div class="project-tags">
+                  {% for tag in repo.tags %}
+                  <span class="badge tag-{{ tag|lower|replace(' ', '-')|replace('_','-') }} me-1">{{ tag }}</span>
+                  {% endfor %}
                </div>
             </div>
-            {% endfor %}
          </div>
-         {% endif %}
       </div>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   <script>
-      // show hint button settings
-      function showHint() {
-          document.getElementById('hint-message').textContent = 'try: Luisjauregui6'
-      }
-      
-      // dark mode/light mode settings
-      const toggle = document.getElementById('theme-toggle');
-      const currentTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', currentTheme);
+      {% endfor %}
+   </div>
+   {% endif %}
+</div>
 
-      toggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+   // Hint button functionality
+   const hintBtn = document.getElementById('hint-btn');
+   const hintMessage = document.getElementById('hint-message');
 
-      toggle.addEventListener('click', () => {
-         const theme = document.documentElement.getAttribute('data-theme');
-         const newTheme = theme === 'dark' ? 'light' : 'dark';
-         document.documentElement.setAttribute('data-theme', newTheme);
-         localStorage.setItem('theme', newTheme);
-         // switch text/symbols when the button is activated
-         toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙'
-      });
+   function showHint() {
+      hintMessage.textContent = 'Try: Luisjauregui6';
+      hintMessage.style.display = 'block';
+      if(hintBtn) hintBtn.classList.remove('pulsate');
+   }
 
-      // hint button functionality
-      const hintBtn = document.getElementById('hint-btn');
-      const hintMessage = document.getElementById('hint-message');
+   // Pulsate hint button after 10 seconds
+   setTimeout(() => {
+      if(hintBtn) hintBtn.classList.add('pulsate');
+   }, 10000);
 
-      // hint button animation 
-      setTimeout(() => {
-         hintBtn.classList.add('pulsate');
-      }, 10000);
+   // Dark/light mode
+   const toggle = document.getElementById('theme-toggle');
+   const currentTheme = localStorage.getItem('theme') || 'light';
+   document.documentElement.setAttribute('data-theme', currentTheme);
+   toggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
 
-      // stop the pulsations when user clicks the hint button
-      function showHint(){
-         hintMessage.textContent = 'try: Luisjauregui6';
-         hintMessage.style.display = 'block';
-         hintBtn.classList.remove('pulsate');
-      }
-
-   </script>
-   </body>
+   toggle.addEventListener('click', () => {
+      const theme = document.documentElement.getAttribute('data-theme');
+      const newTheme = theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+   });
+</script>
+</body>
 </html>
