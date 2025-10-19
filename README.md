@@ -75,7 +75,12 @@ dev-portfolio/
 ```
 
 ## Screenshots
-> EMPTY PLEASE UPLOAD SCREENSHOTS ONCE YOU ARE DONE WITH THE PROJECT
+
+### Homepage
+![Homepage Screenshot](images/1st_ss.png)
+
+### Profiles
+![Profiles](images/2nd_ss.png)
 
 ## Contributing
 Contributions are welcome! If you’d like to improve this project, feel free to fork the repository, make your changes, and submit a pull request.
