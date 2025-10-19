@@ -32,6 +32,12 @@ body {
 	padding: 2rem;
 }
 
+/* remove underline from project's links */
+.project-links {
+	text-decoration: none;
+}
+
+
 /* settings for the profile links to work in dark/light mode */
 
 /* linkedin button */
@@ -47,6 +53,7 @@ body {
 	color: rgb(250, 250, 250);
 }
 
+/* dark mode linkedin button */
 [data-theme='dark'] .linkedin-btn {
 	background-color: rgb(0, 119, 181);
 	color: rgb(255, 255, 255);
@@ -71,6 +78,7 @@ body {
 	color: white;
 }
 
+/* dark mode github button */
 [data-theme='dark'] .github-btn {
 	background-color: rgb(22, 22, 22);
 	color: rgb(248, 248, 248);
@@ -95,6 +103,7 @@ body {
 	color: white;
 }
 
+/* dark mode cv button */
 [data-theme='dark'] .cv-btn {
 	background-color: rgb(60, 173, 50);
 	color: black;
@@ -123,6 +132,8 @@ body {
 	animation: shake 0.4s ease-in-out;
 }
 
+
+/* project containers*/
 .card,
 .container,
 .repo {
@@ -284,20 +295,7 @@ body {
 	animation: pulse 1.5s infinite;
 }
 
-/* smooth fade animation for the loading signal */
-#loader {
-	transition: opacity 0.3s ease;
-}
-
-#loader[style*='display: none'] {
-	opacity: 0;
-}
-
-#loader:not([style*='display: none']) {
-	opacity: 1;
-}
-
-
+/* part of the animation for the 'hint' button */
 @keyframes pulse {
 	0% {
 		transform: scale(1);
@@ -315,10 +313,43 @@ body {
 	}
 }
 
+/* smooth fade animation for the loading signal */
+#loader {
+	transition: opacity 0.3s ease;
+}
+
+#loader[style*='display: none'] {
+	opacity: 0;
+}
+
+#loader:not([style*='display: none']) {
+	opacity: 1;
+}
+
+
+
+/* hint message that appears when the button ('hint') is pressed */
 #hint-message {
 	display: none;
 	color: rgb(216, 131, 34) !important;
 	font-style: italic;
 	font-size: 1.1rem;
 	transition: opacity 0.3s ease-in-out;
+}
+
+/* typing animation */
+#typed-text {
+	color: var(--bs-primary);
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+
+.typed-cursor {
+	color: var(--bs-primary);
+	animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+	0%, 50% { opacity: 1; }
+	51%, 100% { opacity: 0; }
 }
