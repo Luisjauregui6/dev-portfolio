@@ -1,13 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
+from dotenv import load_dotenv
 import os
 from utils.github_api import get_github_data
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('secret_key', 'dev')
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_POST'] = 587
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASSWORD')
@@ -41,7 +44,7 @@ def contact():
     try: 
         msg = Message(
             subject = f'new message from {name}',
-            sender = email,
+            sender = os.environ.get('EMAIL_USER'),
             recipients = ['luisjauregui221@gmail.com'],
             body = f'name: {name}\nEmail: {email}\n\nMessage: {message}'
         )
