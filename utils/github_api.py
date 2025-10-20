@@ -6,26 +6,32 @@ def get_github_data(username):
     user_url = f'https://api.github.com/users/{username}'
     repos_url = f'https://api.github.com/users/{username}/repos'
 
-    user = requests.get(user_url, headers=HEADERS).json()
-    repos = requests.get(repos_url, headers=HEADERS).json()
+    user_resp = requests.get(user_url, headers=HEADERS).json()
+    repos_resp = requests.get(repos_url, headers=HEADERS).json()
 
-    if not isinstance(repos, list):
-        return {
-            'name': user.get('name', username),
-            'bio': user.get('bio', 'no bio available'),
-            'avatar': user.get('avatar_url', ''),
-            'html_url': user.get('html_url', f'https://github.com/{username}'),
-            'repos': []
-        }
+    try:
+        user = requests.get(user_url, headers=HEADERS).json()
+    except Exception:
+        user = {}    
+
+    try:
+        repos = requests.get(repos_url, headers=HEADERS).json()
+        if not isinstance(repos, list):
+            repos = []
+    except Exception:
+        repos = []               
 
     top_repos = sorted(repos, key=lambda r: r.get('stargazers_count', 0), reverse=True)[:5]
 
     repo_list = []
-
     for r in top_repos:
-        topics_resp = requests.get(r['url'] + '/topics', headers=HEADERS)
-        topics_json = topics_resp.json()
-        topics = topics_json.get('names', [])
+        topics = []
+        try:
+          topics_resp = requests.get(r['url'] + '/topics', headers=HEADERS)
+          topics_json = topics_resp.json()
+          topics = topics_json.get('names', [])
+        except Exception:
+            topics = []  
        
         if not topics:
             topics = []
