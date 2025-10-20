@@ -9,6 +9,15 @@ def get_github_data(username):
     user = requests.get(user_url, headers=HEADERS).json()
     repos = requests.get(repos_url, headers=HEADERS).json()
 
+    if not isinstance(repos, list):
+        return {
+            'name': user.get('name', username),
+            'bio': user.get('bio', 'no bio available'),
+            'avatar': user.get('avatar_url', ''),
+            'html_url': user.get('html_url', f'https://github.com/{username}'),
+            'repos': []
+        }
+
     top_repos = sorted(repos, key=lambda r: r.get('stargazers_count', 0), reverse=True)[:5]
 
     repo_list = []
