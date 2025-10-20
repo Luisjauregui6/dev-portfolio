@@ -14,7 +14,18 @@
    </header>
 
    <div class="container py-5">
-
+      <!-- alert after message sent using the contact form -->
+         {% with messages = get_flashed_messages(with_categories=True) %}
+             {% if messages %}
+                 {% for category, message in messages %}
+                     <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert">
+                         {{ message }}
+                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                     </div>
+                 {% endfor %}
+             {% endif %}
+         {% endwith %}
+         
       <!-- Search Bar -->
       {% if not data %}
       <div class="text-center mb-5">
@@ -85,17 +96,7 @@
             </button>
          </div>
 
-         <!-- alert after message sent using the contact form -->
-         {% with messages = get_flashed_messages(with_categories=True) %}
-             {% if messages %}
-                 {% for category, message in messages %}
-                     <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert">
-                         {{ message }}
-                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                     </div>
-                 {% endfor %}
-             {% endif %}
-         {% endwith %}
+         
 
          <!-- this is the contact form -->
          <div class="collapse" id="contactForm">
