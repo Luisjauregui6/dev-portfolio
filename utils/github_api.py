@@ -7,6 +7,7 @@ def _get_headers():
         "Accept": "application/vnd.github.mercy-preview+json"
     }
     if token:
+        
         headers["Authorization"] = f"token {token}"
     return headers
 
@@ -20,11 +21,11 @@ def get_github_data(username):
         repos_resp = requests.get(repos_url, headers=headers)
 
         
-        print('USER RESPONSE:', user_resp.status_code, user_resp.text[:200])
+        print('USER RESPONSE:', user_resp.status_code)
         print('REPOS RESPONSE:', repos_resp.status_code)
 
+        
         if user_resp.status_code == 401 or repos_resp.status_code == 401:
-            
             return {
                 'name': username,
                 'bio': 'GitHub authentication failed (bad token).',
@@ -33,6 +34,7 @@ def get_github_data(username):
                 'repos': []
             }
 
+        # Rate limit
         if user_resp.status_code == 403 or repos_resp.status_code == 403:
             return {
                 'name': username,
@@ -46,7 +48,8 @@ def get_github_data(username):
         repos = repos_resp.json()
         if not isinstance(repos, list):
             repos = []
-    except Exception:
+    except Exception as e:
+        print('Exception in get_github_data:', e)
         user, repos = {}, []
 
     top_repos = sorted(repos, key=lambda r: r.get('stargazers_count', 0), reverse=True)[:5]
@@ -54,7 +57,7 @@ def get_github_data(username):
 
     for r in top_repos:
         try:
-            topics_resp = requests.get(r['url'] + '/topics', headers=headers)
+            topics_resp = requests.get(r['url'] + '/topics', headers=_get_headers())
             topics_json = topics_resp.json()
             topics = topics_json.get('names', [])
         except Exception:

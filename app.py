@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 import os
@@ -23,7 +23,6 @@ app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER')
 
 mail = Mail(app)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def portfolio():
     data = None
@@ -33,13 +32,9 @@ def portfolio():
         username = request.form.get('username')
         if username:
             data = get_github_data(username)
-            if username.lower() == 'luisjauregui6':
-                data['is_owner'] = True
-            else:
-                data['is_owner'] = False
+            data['is_owner'] = (username.lower() == 'luisjauregui6')
 
     return render_template("portfolio.html", data=data, hint=hint)
-
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -61,5 +56,13 @@ def contact():
     return redirect(url_for('portfolio'))
 
 
+@app.route('/_debug_env')
+def debug_env():
+    return jsonify({
+        'GITHUB_TOKEN_set': bool(os.environ.get('GITHUB_TOKEN')),
+        'EMAIL_USER_set': bool(os.environ.get('EMAIL_USER')),
+        'SECRET_KEY_set': bool(os.environ.get('SECRET_KEY'))
+    })
+
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=False, host='0.0.0.0')
