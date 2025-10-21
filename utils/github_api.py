@@ -1,5 +1,8 @@
 import requests
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 def _get_headers():
     token = os.environ.get('GITHUB_TOKEN', '').strip()
@@ -16,14 +19,14 @@ def get_github_data(username):
     repos_url = f'https://api.github.com/users/{username}/repos'
 
     try:
-        user_resp = requests.get(user_url, headers=headers)
-        repos_resp = requests.get(repos_url, headers=headers)
+        user_resp = requests.get(user_url, headers=headers, timeout=10)
+        repos_resp = requests.get(repos_url, headers=headers, timeout=10)
 
-        
-        print('USER RESPONSE:', user_resp.status_code)
-        print('REPOS RESPONSE:', repos_resp.status_code)
+        # Safe logging for troubleshooting 
+        logger.info("get_github_data: username=%s; user_status=%s; repos_status=%s",
+                    username, user_resp.status_code, repos_resp.status_code)
 
- 
+        # Authentication failure
         if user_resp.status_code == 401 or repos_resp.status_code == 401:
             return {
                 'name': username,
@@ -33,7 +36,7 @@ def get_github_data(username):
                 'repos': []
             }
 
-      
+        # Rate limiting or forbidden
         if user_resp.status_code == 403 or repos_resp.status_code == 403:
             return {
                 'name': username,
@@ -43,23 +46,23 @@ def get_github_data(username):
                 'repos': []
             }
 
-        user = user_resp.json()
-        repos = repos_resp.json()
+        user = user_resp.json() if user_resp.ok else {}
+        repos = repos_resp.json() if repos_resp.ok else []
         if not isinstance(repos, list):
             repos = []
     except Exception as e:
-        print('Exception in get_github_data:', e)
+        logger.exception("Exception in get_github_data for %s", username)
         user, repos = {}, []
 
-
+    # sort repos by stars and pick top 5
     top_repos = sorted(repos, key=lambda r: r.get('stargazers_count', 0), reverse=True)[:5]
     repo_list = []
 
     for r in top_repos:
         try:
-            topics_resp = requests.get(r['url'] + '/topics', headers=_get_headers())
-            topics_json = topics_resp.json()
-            topics = topics_json.get('names', [])
+            topics_resp = requests.get(r['url'] + '/topics', headers=_get_headers(), timeout=5)
+            topics_json = topics_resp.json() if topics_resp.ok else {}
+            topics = topics_json.get('names', []) if isinstance(topics_json, dict) else []
         except Exception:
             topics = []
 
