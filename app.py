@@ -2,12 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 import os
-from utils.github_api import get_github_data
+
 
 load_dotenv()
 
+
+print('DEBUG GITHUB_TOKEN set?', bool(os.environ.get('GITHUB_TOKEN')))
+
+from utils.github_api import get_github_data
+
 app = Flask(__name__)
-app.secret_key = os.environ.get('secret_key', 'dev')
+app.secret_key = os.environ.get('SECRET_KEY', 'dev')
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -22,7 +27,7 @@ mail = Mail(app)
 @app.route('/', methods=['GET', 'POST'])
 def portfolio():
     data = None
-    hint = "Try: Luisjauregui6"  
+    hint = "Try: Luisjauregui6"
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -31,22 +36,22 @@ def portfolio():
             if username.lower() == 'luisjauregui6':
                 data['is_owner'] = True
             else:
-                data['is_owner'] = False   
+                data['is_owner'] = False
 
     return render_template("portfolio.html", data=data, hint=hint)
 
-# contact form 
+
 @app.route('/contact', methods=['POST'])
 def contact():
     name = request.form['name']
     email = request.form['email']
     message = request.form['message']
-    try: 
+    try:
         msg = Message(
-            subject = f'new message from {name}',
-            sender = os.environ.get('EMAIL_USER'),
-            recipients = ['luisjauregui221@gmail.com'],
-            body = f'name: {name}\nEmail: {email}\n\nMessage: {message}'
+            subject=f'new message from {name}',
+            sender=os.environ.get('EMAIL_USER'),
+            recipients=['luisjauregui221@gmail.com'],
+            body=f'name: {name}\nEmail: {email}\n\nMessage: {message}'
         )
         mail.send(msg)
         flash('message sent!', 'success')
@@ -54,6 +59,7 @@ def contact():
         flash(f'error while trying to send the message: {e}', 'danger')
 
     return redirect(url_for('portfolio'))
+
 
 if __name__ == "__main__":
     app.run(debug=False)
