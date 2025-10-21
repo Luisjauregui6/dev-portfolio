@@ -7,7 +7,6 @@ def _get_headers():
         "Accept": "application/vnd.github.mercy-preview+json"
     }
     if token:
-        
         headers["Authorization"] = f"token {token}"
     return headers
 
@@ -24,7 +23,7 @@ def get_github_data(username):
         print('USER RESPONSE:', user_resp.status_code)
         print('REPOS RESPONSE:', repos_resp.status_code)
 
-        
+ 
         if user_resp.status_code == 401 or repos_resp.status_code == 401:
             return {
                 'name': username,
@@ -34,7 +33,7 @@ def get_github_data(username):
                 'repos': []
             }
 
-        # Rate limit
+      
         if user_resp.status_code == 403 or repos_resp.status_code == 403:
             return {
                 'name': username,
@@ -51,6 +50,7 @@ def get_github_data(username):
     except Exception as e:
         print('Exception in get_github_data:', e)
         user, repos = {}, []
+
 
     top_repos = sorted(repos, key=lambda r: r.get('stargazers_count', 0), reverse=True)[:5]
     repo_list = []

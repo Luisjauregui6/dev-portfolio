@@ -3,11 +3,10 @@ from flask_mail import Mail, Message
 from dotenv import load_dotenv
 import os
 
-
 load_dotenv()
 
-
 print('DEBUG GITHUB_TOKEN set?', bool(os.environ.get('GITHUB_TOKEN')))
+
 
 from utils.github_api import get_github_data
 
@@ -27,13 +26,11 @@ mail = Mail(app)
 def portfolio():
     data = None
     hint = "Try: Luisjauregui6"
-
     if request.method == 'POST':
         username = request.form.get('username')
         if username:
             data = get_github_data(username)
             data['is_owner'] = (username.lower() == 'luisjauregui6')
-
     return render_template("portfolio.html", data=data, hint=hint)
 
 @app.route('/contact', methods=['POST'])
@@ -52,17 +49,21 @@ def contact():
         flash('message sent!', 'success')
     except Exception as e:
         flash(f'error while trying to send the message: {e}', 'danger')
-
     return redirect(url_for('portfolio'))
 
 
-@app.route('/_debug_env')
-def debug_env():
-    return jsonify({
-        'GITHUB_TOKEN_set': bool(os.environ.get('GITHUB_TOKEN')),
-        'EMAIL_USER_set': bool(os.environ.get('EMAIL_USER')),
-        'SECRET_KEY_set': bool(os.environ.get('SECRET_KEY'))
-    })
+@app.route('/_test_github/<username>')
+def test_github(username):
+    try:
+        data = get_github_data(username)
+        return jsonify({
+            "ok": True,
+            "source": "get_github_data",
+            "username_requested": username,
+            "result": data
+        })
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0')
