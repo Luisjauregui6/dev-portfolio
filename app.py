@@ -32,13 +32,27 @@ mail = Mail(app)
 def portfolio():
     data = None
     hint = "Try: Luisjauregui6"
+    
     if request.method == 'POST':
         username = request.form.get('username')
         if username:
             data = get_github_data(username)
-           
+            
             if isinstance(data, dict):
                 data['is_owner'] = (username.lower() == 'luisjauregui6')
+
+                # Add GIF paths automatically
+                for repo in data.get('repos', []):
+                    # Define gif_filename and gif_path inside the loop
+                    gif_filename = f"{repo['name'].lower()}.gif"
+                    gif_path = os.path.join(app.static_folder, 'gifs', gif_filename)
+
+                    # Check for existence and assign the URL INSIDE the loop
+                    if os.path.exists(gif_path):
+                        repo['gif'] = url_for('static', filename=f'gifs/{gif_filename}')
+                    else:
+                        repo['gif'] = url_for('static', filename='images/default.gif')
+
     return render_template("portfolio.html", data=data, hint=hint)
 
 @app.route('/contact', methods=['POST'])

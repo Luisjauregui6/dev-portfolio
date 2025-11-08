@@ -1,213 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>GitHub Portfolio</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-   <header class="p-3 text-end">
-      <button id="theme-toggle" class="btn btn-sm btn-outline-secondary shake">dark mode</button>
-   </header>
+    <header class="p-3 text-end">
+        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary shake">dark mode</button>
+    </header>
 
-   <div class="container py-5">
-      <!-- alert after message sent using the contact form -->
-         {% with messages = get_flashed_messages(with_categories=True) %}
-             {% if messages %}
-                 {% for category, message in messages %}
-                     <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert">
-                         {{ message }}
-                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                     </div>
-                 {% endfor %}
-             {% endif %}
-         {% endwith %}
-         
-      <!-- Search Bar -->
-      {% if not data %}
-      <div class="text-center mb-5">
-         <h1 class="fw-bold text-gradient mb-3">Search GitHub Profiles</h1>
-         <p class="paragraph-text text-muted fs-5">Find any GitHub user and explore their repositories instantly</p>
-         <form id="search-form" method="POST" action="/" class="d-flex justify-content-center mt-3">
-            <input type="text" name="username" class="form-control w-50 me-2" placeholder="Enter a GitHub username...">
-            <button type="submit" id="search-button" class="btn btn-primary">Search</button>
-         </form>
+    <div class="container py-5">
+    <!-- alert after message sent using the contact form -->    
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+    <!-- Search Bar -->    
+        {% if not data %}
+        <div class="text-center mb-5">
+            <h1 class="fw-bold text-gradient mb-3">Search GitHub Profiles</h1>
+            <p class="paragraph-text text-muted fs-5">Find any GitHub user and explore their repositories instantly</p>
+            <form id="search-form" method="POST" action="/" class="d-flex justify-content-center mt-3">
+                <input type="text" name="username" class="form-control w-50 me-2" placeholder="Enter a GitHub username...">
+                <button type="submit" id="search-button" class="btn btn-primary">Search</button>
+            </form>
 
-         <!-- loading screen -->
-         <div id="loader" class="text-center mt-4" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-               <span class="visually-hidden">loading profile...</span>
+    <!-- loading screen -->
+            <div id="loader" class="text-center mt-4" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">loading profile...</span>
+                </div>
+                <p class="mt-2">loading profile...</p>
             </div>
-            <p class="mt-2">loading profile...</p>
-         </div>
 
-         <div class="mt-3">
-            <button id="hint-btn" type="button" class="btn btn-secondary" onclick="showHint()">Hint</button>
-            <p id="hint-message" class="mt-2 text-info"></p>
-         </div>
-      </div>
-      {% endif %}
-
-      <!-- Profile Section -->
-      {% if data %}
-      <div class="text-center mb-5">
-         <img src="{{ data.avatar }}" class="rounded-circle mb-3" width="150" alt="User Avatar">
-         <h1>{{ data.name }}</h1>
-         <p class="lead"><em>{{ data.bio }}</em></p>
-         <a href="{{ data.html_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Visit GitHub Account</a>
-      </div>
-
-      {% if data.is_owner %}
-      <hr class="my-5">
-      <div class="text-center mb-4">
-         <h2>About Me</h2>
-
-         <!-- Typing animation -->
-         <h2 class="fw'bold text-center mb-3">
-            <span id="typed-text"></span>
-         </h2>
-           <p class="lead">
-           </p>
-         
-         <!-- Tech stack icons -->
-         <div class="d-flex justify-content-center flex-wrap mb-4">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="50" class="m-2" alt="Python">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="50" class="m-2" alt="Flask">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width="50" class="m-2" alt="Bootstrap">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="50" class="m-2" alt="HTML5">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="50" class="m-2" alt="CSS3">  
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="50" class="m-2" alt="JavaScript">
-         </div>
-
-         <!-- Links -->
-         <div class="mb-4">
-            <a href="https://www.linkedin.com/in/luis-jauregui-flores-83672821b/" target="_blank" rel="noopener noreferrer" class="btn linkedin-btn me-2">LinkedIn</a>
-            <a href="https://github.com/Luisjauregui6" target="_blank" rel="noopener noreferrer" class="btn github-btn me-2">GitHub</a>
-            <a href="https://drive.google.com/file/d/1txF3suEeig4NYdsjmxDy9QFLQ0tep8-1/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn cv-btn">Download CV</a>
-         </div>
-
-         <!-- Contact form -->
-         <div class="text-center mb-4">
-            <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#contactForm" aria-expanded="false" aria-controls="contactForm">
-               Contact Me
-            </button>
-         </div>
-
-         
-
-         <!-- this is the contact form -->
-         <div class="collapse" id="contactForm">
-            <div class="card mx-auto mt-4 shadow-sm" style="max-width: 500px;">
-               <div class="card-body">
-                  <form method="POST" action="/contact">
-                     <div class="mb-3">
-                        <input type="text" name="name" class="form-control" placeholder="Your name" required>
-                     </div>
-                     <div class="mb-3">
-                        <input type="email" name="email" class="form-control" placeholder="Your email" required>
-                     </div>
-                     <div class="mb-3">
-                        <textarea name="message" class="form-control" rows="3" placeholder="Your message" required></textarea>
-                     </div>
-                     <button type="submit" class="btn btn-primary w-100">Send</button>
-                  </form>
-               </div>
+            <div class="mt-3">
+                <button id="hint-btn" type="button" class="btn btn-secondary" onclick="showHint()">Hint</button>
+                <p id="hint-message" class="mt-2 text-info"></p>
             </div>
-         </div>
-      </div>
-      {% endif %}
+        </div>
+        {% endif %}
 
-      <!-- User projects -->
-      <h2 class="mb-4 text-center">Projects</h2>
-      <div class="row">
-         {% for repo in data.repos %}
-         <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-               <div class="card-body">
-                  <h5 class="card-title">
-                     <a href="{{ repo.url }}" class="project-links" target="_blank" rel="noopener noreferrer">{{ repo.name }}</a>
-                  </h5>
-                  <p class="card-text">{{ repo.description }}</p>
-               </div>
-               <div class="card-footer">
-                  <div class="project-tags">
-                     {% for tag in repo.tags %}
-                     <span class="badge tag-{{ tag|lower|replace(' ', '-')|replace('_','-') }} me-1">{{ tag }}</span>
-                     {% endfor %}
-                  </div>
-               </div>
+    <!-- Profile Section -->
+        {% if data %}
+        <div class="text-center mb-5">
+            <img src="{{ data.avatar }}" class="rounded-circle mb-3" width="150" alt="User Avatar">
+            <h1>{{ data.name }}</h1>
+            <p class="lead"><em>{{ data.bio }}</em></p>
+        </div>
+
+        {% if data.is_owner %}
+        <hr class="my-5">
+        <div class="text-center mb-4">
+            <h2>About Me</h2>
+
+    <!-- Typing animation -->
+            <h2 class="fw'bold text-center mb-3">
+                <span id="typed-text"></span>
+            </h2>
+                <p class="lead">
+                </p>
+            
+    <!-- Tech stack icons -->
+            <div class="d-flex justify-content-center flex-wrap mb-4">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="50" class="m-2" alt="Python">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" width="50" class="m-2" alt="Flask">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width="50" class="m-2" alt="Bootstrap">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="50" class="m-2" alt="HTML5">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="50" class="m-2" alt="CSS3">  
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="50" class="m-2" alt="JavaScript">
             </div>
-         </div>
-         {% endfor %}
-      </div>
-      {% endif %} 
 
-   </div>
+    <!-- Links -->
+            <div class="mb-4">
+                <a href="https://www.linkedin.com/in/luis-jauregui-flores-83672821b/" target="_blank" rel="noopener noreferrer" class="btn linkedin-btn me-2">LinkedIn</a>
+                <a href="https://github.com/Luisjauregui6" target="_blank" rel="noopener noreferrer" class="btn github-btn me-2">GitHub</a>
+                <a href="https://drive.google.com/file/d/1txF3suEeig4NYdsjmxDy9QFLQ0tep8-1/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn cv-btn">Download CV</a>
+            </div>
 
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   <script>
-      // Hint button
-      const hintBtn = document.getElementById('hint-btn');
-      const hintMessage = document.getElementById('hint-message');
-      
-      function showHint() {
-         hintMessage.textContent = 'Try: Luisjauregui6';
-         hintMessage.style.display = 'block';
-         if (hintBtn) hintBtn.classList.remove('pulsate');
-      }
-      
-      setTimeout(() => {
-         if (hintBtn) hintBtn.classList.add('pulsate');
-      }, 10000);
-      
-      // Dark/light mode
-      const toggle = document.getElementById('theme-toggle');
-      const currentTheme = localStorage.getItem('theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      toggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-      
-      toggle.addEventListener('click', () => {
-         const theme = document.documentElement.getAttribute('data-theme');
-         const newTheme = theme === 'dark' ? 'light' : 'dark';
-         document.documentElement.setAttribute('data-theme', newTheme);
-         localStorage.setItem('theme', newTheme);
-         toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-      });
-      
-      // Loading screen
-      const form = document.getElementById('search-form');
-      const loader = document.getElementById('loader');
-      const searchBtn = document.getElementById('search-button');
-      
-      if (form) {
-         form.addEventListener('submit', () => {
-            loader.style.display = 'block';
-            searchBtn.disabled = true;
-            searchBtn.textContent = 'Loading...';
-         });
-      }
+    <!-- Contact form button -->
+            <div class="text-center mb-4">
+                <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#contactForm" aria-expanded="false" aria-controls="contactForm">
+                    Contact Me
+                </button>
+            </div>
 
-      // typing effects
-      document.addEventListener('DOMContentLoaded', function (){
-         new Typed('#typed-text', {
-            strings: [
-               'Hi, I am Luis.',
-               'I am a Python Developer.',
-               'I love building creative interfaces',
-               'Welcome to my portfolio!'
-            ],
-            typeSpeed: 60,
-            backSpeed: 40,
-            backDelay: 1200,
-            loop: true,
-            showCursor: true,
-            cursorChar: '|',
-         })
-      })
+            
+    <!-- this is the contact form once the button has been pressed -->
+            <div class="collapse" id="contactForm">
+                <div class="card mx-auto mt-4 shadow-sm" style="max-width: 500px;">
+                    <div class="card-body">
+                        <form method="POST" action="/contact">
+                            <div class="mb-3">
+                                <input type="text" name="name" class="form-control" placeholder="Your name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" name="email" class="form-control" placeholder="Your email" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="message" class="form-control" rows="3" placeholder="Your message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
-   </script>
+
+    <!-- User projects -->    
+        <h2 class="mb-4 text-center">Projects</h2>
+        <div class="row">
+            {% for repo in data.repos %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{{ repo.url }}" class="project-links" target="_blank" rel="noopener noreferrer">{{ repo.name }}</a>
+                        </h5>
+                        <p class="card-text">{{ repo.description }}</p>
+                    </div>
+    
+    <!-- Image placeholder that replaces the GIF's for optimization purposes  -->
+        <div class="gif-wrapper p-3">
+                        <img src="{{ url_for('static', filename='images/static_placeholder.jpeg') }}" 
+                             data-gif-src="{{ repo.gif }}"
+                             alt="animated preview of {{ repo.name }}"
+                             class="img-fluid rounded border project-gif"
+                             data-loaded="false"
+                        >
+                    </div>
+
+    <!-- Here is where the project's tags go -->
+        <div class="card-footer">
+                        <div class="project-tags">
+                            {% for tag in repo.tags %}
+                            <span class="badge tag-{{ tag|lower|replace(' ', '-')|replace('_','-') }} me-1">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %} 
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Hint button in main page under search bar
+        const hintBtn = document.getElementById('hint-btn');
+        const hintMessage = document.getElementById('hint-message');
+        
+        function showHint() {
+            hintMessage.textContent = 'Try: Luisjauregui6';
+            hintMessage.style.display = 'block';
+            if (hintBtn) hintBtn.classList.remove('pulsate');
+        }
+        
+        setTimeout(() => {
+            if (hintBtn) hintBtn.classList.add('pulsate');
+        }, 10000);
+        
+        // Dark/light mode
+        const toggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        toggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+        
+        toggle.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+        
+        // Loading screen after searching up a github profile
+        const form = document.getElementById('search-form');
+        const loader = document.getElementById('loader');
+        const searchBtn = document.getElementById('search-button');
+        
+        if (form) {
+            form.addEventListener('submit', () => {
+                loader.style.display = 'block';
+                searchBtn.disabled = true;
+                searchBtn.textContent = 'Loading...';
+            });
+        }
+
+        // typing effects in personal github page
+        document.addEventListener('DOMContentLoaded', function (){
+            const typedElement = document.getElementById('typed-text');
+            if (typedElement) {
+                new Typed('#typed-text', {
+                    strings: [
+                        'Hi, I am Luis.',
+                        'I am a Python Developer.',
+                        'I love building creative interfaces',
+                        'Welcome to my portfolio!'
+                    ],
+                    typeSpeed: 60,
+                    backSpeed: 40,
+                    backDelay: 1200,
+                    loop: true,
+                    showCursor: true,
+                    cursorChar: '|',
+                });
+            }
+        });
+
+        // Function to handle GIF loading on hover and stop playing on mouse leave
+    function handleGifLoading() {
+        const gifImages = document.querySelectorAll('.project-gif');
+
+        gifImages.forEach(img => {
+            // Get the parent card container (.card)
+            const cardContainer = img.closest('.card');
+            // Get the row that contains all cards (closest .row)
+            const cardsRow = cardContainer ? cardContainer.closest('.row') : null;
+
+            // Store the static placeholder URL once for safe comparison/reset
+            const placeholderSrc = img.src; 
+
+            cardContainer.addEventListener('mouseenter', () => {
+                // **1. Add CSS class for smooth expansion**
+                cardContainer.classList.add('project-card-hover'); 
+
+                // Add class to row to blur other cards
+                if (cardsRow) {
+                    cardsRow.classList.add('cards-blur');
+                }
+
+                // 2. Load the GIF
+                if (img.src === placeholderSrc) {
+                    const gifSource = img.dataset.gifSrc;
+                    
+                    // Set the actual GIF source to load and start playback
+                    img.src = gifSource;
+                    img.dataset.loaded = 'true'; 
+                }
+            });
+
+            cardContainer.addEventListener('mouseleave', () => {
+                cardContainer.classList.remove('project-card-hover'); 
+                
+                // Remove row blur class so other cards return to normal
+                if (cardsRow) {
+                    cardsRow.classList.remove('cards-blur');
+                }
+                
+                // 2. Stop the GIF
+                if (img.dataset.loaded === 'true') {
+                    // Swap the source back to the static placeholder to stop the GIF
+                    img.src = placeholderSrc; 
+                    img.dataset.loaded = 'false'; 
+                }
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', handleGifLoading);
+    </script>
 </body>
 </html>
